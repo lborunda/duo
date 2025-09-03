@@ -49,6 +49,22 @@ cd duo
 
 
 
+
+Markdown
+## 🚀 Getting Started
+
+Follow these instructions to get a copy of the project up and running on your local machine for development and testing purposes.
+
+### Prerequisites
+
+-   [Node.js](https://nodejs.org/) (v18 or later recommended)
+-   [Google Cloud SDK (`gcloud` CLI)](https://cloud.google.com/sdk/docs/install) authenticated with your Google account.
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/lborunda/duo.git
+cd duo
 2. Install Dependencies
 The project has separate dependencies for the frontend and the backend server.
 code
@@ -81,7 +97,6 @@ code
 Bash
 npm run dev
 Open your browser to the local address provided by Vite (usually http://localhost:5173).
-
 ☁️ Deployment to Google Cloud Run
 This application is designed for easy, continuous deployment to Google Cloud Run via Cloud Build.
 1. Secure Your API Keys
@@ -121,6 +136,5 @@ Code
 ├── Dockerfile            # Instructions for building the production container
 ├── package.json          # Project scripts and dependencies
 └── vite.config.ts        # Vite configuration
-
 👨‍💻 Author
 Luis Borunda - lborunda@vt.edu
