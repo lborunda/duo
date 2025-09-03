@@ -1,0 +1,9 @@
+{
+  "name": "BACKUP v1 works on macbook _Detail %PrefCons!%Companion%Voice% DUO AI",
+  "description": "Conversational AI guide that brings the world around you to life. DUO uses your camera to see what you see, engaging you with rich descriptions and interactive dialogue. Touch the screen, use your voice, and explore the world like never before.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "prompt": ""
+}

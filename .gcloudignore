@@ -1,0 +1,6 @@
+# Everything that’s ignored by default
+node_modules
+*.log
+
+# Do NOT ignore dist
+!dist

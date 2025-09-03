@@ -1,0 +1,26 @@
+{
+  "short_name": "DUO AI",
+  "name": "DUO AI Travel Companion",
+  "description": "Conversational AI guide that brings the world around you to life.",
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#f97316",
+  "background_color": "#f5f5f4"
+}
