@@ -41,100 +41,108 @@ Follow these instructions to get a copy of the project up and running on your lo
 -   [Node.js](https://nodejs.org/) (v18 or later recommended)
 -   [Google Cloud SDK (`gcloud` CLI)](https://cloud.google.com/sdk/docs/install) authenticated with your Google account.
 
-### 1. Clone the Repository
 
-```bash
+🧑‍🏫 How to Clone and Share this App for Teaching and Continued Development
+
+This project is fully functional on Google Cloud Run
+ and can be cloned from this GitHub repo for local development or further collaboration with students.
+
+✅ Step-by-Step Instructions
+1. 📦 Clone the GitHub Repository
 git clone https://github.com/lborunda/duo.git
 cd duo
 
-
-
-
-Markdown
-## 🚀 Getting Started
-
-Follow these instructions to get a copy of the project up and running on your local machine for development and testing purposes.
-
-### Prerequisites
-
--   [Node.js](https://nodejs.org/) (v18 or later recommended)
--   [Google Cloud SDK (`gcloud` CLI)](https://cloud.google.com/sdk/docs/install) authenticated with your Google account.
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/lborunda/duo.git
-cd duo
-2. Install Dependencies
-The project has separate dependencies for the frontend and the backend server.
-code
-Bash
-# Install root/frontend dependencies
+2. 📁 Install Dependencies
+# Frontend (React, Vite, Tailwind)
 npm install
 
-# Install backend server dependencies
+# Backend (Node.js proxy server)
 cd server
 npm install
 cd ..
-3. Configure Environment Variables
-You will need API keys for Google Gemini and ElevenLabs. Create two .env files:
-A. Root Directory (./.env)
-This file is for the Vite development server.
-code
-Code
-# ./.env
+
+3. 🔑 Configure Environment Variables
+
+Create two .env files based on the examples below.
+
+A. Root-level .env (for Vite frontend):
+
 GEMINI_API_KEY=your_google_gemini_api_key
-B. Server Directory (./server/.env)
-This file is for the backend proxy server.
-code
-Code
-# ./server/.env
+
+
+B. Backend .env (./server/.env):
+
 ELEVENLABS_API_KEY=your_elevenlabs_api_key
 GEMINI_API_KEY=your_google_gemini_api_key
-4. Run the Development Server
-This command will start both the frontend Vite server and the backend Express server concurrently.
-code
-Bash
+
+
+✅ You can use .env.example to share with students without exposing keys.
+
+4. ▶️ Run in Development Mode
 npm run dev
-Open your browser to the local address provided by Vite (usually http://localhost:5173).
-☁️ Deployment to Google Cloud Run
-This application is designed for easy, continuous deployment to Google Cloud Run via Cloud Build.
-1. Secure Your API Keys
-Never commit API keys to your repository. Use Google Secret Manager.
-code
-Bash
-# Replace [...] with your actual keys
-echo -n "[YOUR_GEMINI_API_KEY]" | gcloud secrets create gemini_api_key --data-file=-
-echo -n "[YOUR_ELEVENLABS_API_KEY]" | gcloud secrets create elevenlabs_api_key --data-file=-
-2. Set up Cloud Build Trigger
-Navigate to the Cloud Build > Triggers page in the Google Cloud Console.
-Connect your GitHub repository (lborunda/duo).
-Create a new trigger:
-Event: Push to a branch
-Branch: ^main$
-Configuration: Dockerfile
+
+
+This will start both:
+
+The Vite frontend on http://localhost:5173
+
+The Node backend proxy on a local port for API calls
+
+☁️ Deploying Back to Google Cloud Run
+
+To allow students or collaborators to deploy their changes:
+
+Step 1: Secure API Keys
+echo -n "your_key" | gcloud secrets create gemini_api_key --
+echo -n "your_key" | gcloud secrets create elevenlabs_api_key --
+
+Step 2: Connect GitHub to Google Cloud Build
+
+Set up a trigger:
+
+Event: Push to branch
+
+Branch Regex: ^main$
+
 Dockerfile location: ./Dockerfile
-3. First Manual Deploy
-Deploy the service for the first time manually. This command links the secrets and sets up the service. Replace my-app with your desired service name.
-code
-Bash
+
+Step 3: First Deploy Manually
 gcloud run deploy my-app \
   --source=. \
   --update-secrets=GEMINI_API_KEY=gemini_api_key:latest,ELEVENLABS_API_KEY=elevenlabs_api_key:latest
-After this initial deployment, every push to the main branch will automatically trigger a new build and deployment via the Cloud Build trigger.
-📂 Project Structure
-A brief overview of the key directories in this project.
-code
-Code
+
+
+After that, every git push to the main branch will trigger a deployment automatically.
+
+🧰 Tech Stack
+
+Frontend: React, TypeScript, Tailwind, Vite
+
+AI: Google Gemini, ElevenLabs, Web Speech API
+
+Backend: Node.js + Express
+
+Deployment: Docker, Cloud Run, Cloud Build
+
+🗂 Project Structure
 /
-├── server/               # Backend Express proxy server
-├── src/
-│   ├── components/       # Reusable React components
-│   ├── hooks/            # Custom React hooks (camera, speech, etc.)
-│   ├── services/         # API clients (Gemini, ElevenLabs)
-│   └── types.ts          # Core TypeScript types and interfaces
-├── Dockerfile            # Instructions for building the production container
-├── package.json          # Project scripts and dependencies
-└── vite.config.ts        # Vite configuration
-👨‍💻 Author
+├── server/            # Node.js backend proxy
+├── src/               # Frontend app (React)
+│   ├── components/
+│   ├── hooks/
+│   ├── services/
+│   └── types.ts
+├── Dockerfile
+├── package.json
+└── vite.config.ts
+
+👨‍🏫 Sharing and Collaboration Tips
+
+Fork or clone the repo from: github.com/lborunda/duo
+
+Use GitHub Issues or Projects for assigning parts
+
+Students can open in Codespaces or VS Code directly
+
+Author
 Luis Borunda - lborunda@vt.edu
