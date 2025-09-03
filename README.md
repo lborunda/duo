@@ -5,7 +5,8 @@
 </p>
 
 <p align="center">
-  <strong>A futuristic, sentient AI travel guide that brings the world around you to life.</strong><br />
+  <strong>Sentient AI travel guide that brings the world around you to life.</strong><br />
+  This project builds on architectural research into spatial intelligence, AI-assisted accessibility, and human-computation frameworks to augment place-based exploration. DUO applies techniques from egocentric computer vision, contextual NLP, and interactive design systems to enhance the experiential understanding of real-world environments.
   DUO uses your camera to see what you see, engaging you with rich descriptions and interactive dialogue. Explore the world like never before.
 </p>
 
@@ -158,7 +159,7 @@ After that, every `git push` to the `main` branch will trigger a deployment auto
 
 ---
 
-## 👨‍🎓 Author
+## Author
 
 **Luis Borunda**  
 📧 [lborunda@vt.edu](mailto:lborunda@vt.edu)
