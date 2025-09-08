@@ -164,3 +164,5 @@ After that, every `git push` to the `main` branch will trigger a deployment auto
 **Luis Borunda**  
 📧 [lborunda@vt.edu](mailto:lborunda@vt.edu)
 
+Licensed under the [Apache License, Version 2.0](LICENSE).  
+© 2025 Luis Borunda
