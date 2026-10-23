@@ -1,5 +1,28 @@
 # DUO AI - Your Personal AI Travel Companion
 
+## Shared glasses preview — development branch
+
+The `shared-glasses-preview` branch pairs with the same branch in
+[DUO Tour](https://github.com/lborunda/duo-tour/tree/shared-glasses-preview).
+Run `npm install`, `npm test`, and `npm run build`, then point DUO Tour's
+`DUO_WEB_DIR` at this checkout's `dist` directory before starting its server.
+
+Open the companion from the Android DUO Tour app with Ray-Ban Meta selected.
+The embedded screen uses the existing Toolkit session for live preview and
+still capture; it does not open a second glasses session or fall back to the
+phone camera. A standalone browser still uses its own camera and requires a
+secure context. The native adapter is available only inside DUO Tour.
+
+This is work in progress: builds and adapter tests pass, but real-glasses
+streaming remains blocked by `SERVICE_NOT_FOUND` during DWA bootstrap on the
+current test setup. The companion's description and speech pipeline is
+unchanged; this update does not add DUO Tour's grounding rules to those requests.
+
+Validation notes: the existing full TypeScript check is not clean (including
+missing React type declarations and preference-type errors). The new camera
+transport has a separate passing strict type check. No credentials, recordings
+or compiled build are included in this branch.
+
 <p align="center">
   <img src="https://storage.googleapis.com/gemini-prod-us-west1-assets/v1/f7c162625291b8d8f079f29125345607b3164991c1b1819828464f1d4f293b68" alt="DUO AI Logo" width="150">
 </p>

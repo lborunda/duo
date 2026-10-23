@@ -1,6 +1,6 @@
 
-import React, { useEffect, useRef } from 'react';
-import { useCamera } from '../hooks/useCamera';
+import React, { useEffect } from 'react';
+import { useSharedCamera } from '../hooks/useSharedCamera';
 import { BookOpenIcon, SettingsIcon } from './icons';
 
 interface CameraViewProps {
@@ -9,15 +9,14 @@ interface CameraViewProps {
 }
 
 export const CameraView: React.FC<CameraViewProps> = ({ onCapture, onViewChange }) => {
-  const { videoRef, isStreaming, startStream, stopStream, captureFrame, error } = useCamera(onCapture);
+  const { videoRef, previewUrl, nativeMode, isStreaming, startStream, stopStream, retryStream, captureFrame, error, detail } = useSharedCamera(onCapture);
   
   useEffect(() => {
     startStream();
     return () => {
       stopStream();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [startStream, stopStream]);
   
   const handleCaptureClick = () => {
     if ('vibrate' in navigator) navigator.vibrate(50);
@@ -26,20 +25,24 @@ export const CameraView: React.FC<CameraViewProps> = ({ onCapture, onViewChange 
 
   return (
     <div className="absolute inset-0 bg-black flex items-center justify-center">
-      <video
+      {nativeMode ? (previewUrl && <img src={previewUrl} alt="Live view from Ray-Ban Meta glasses" className="w-full h-full object-contain" />) : <video
         ref={videoRef}
         className="w-full h-full object-cover"
         playsInline
         muted
-      />
+      />}
       {error && (
         <div className="absolute inset-x-0 top-0 bg-red-500 text-white p-4 text-center">
           <p>{error}</p>
+          <button onClick={retryStream} className="underline mt-2">Retry camera connection</button>
         </div>
       )}
       {!isStreaming && !error && (
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <p className="text-white text-lg">Initializing DUO's Vision...</p>
+          <div className="text-white text-lg text-center">
+            <p>{detail}</p>
+            <button onClick={retryStream} className="underline mt-2">Retry camera connection</button>
+          </div>
         </div>
       )}
 
