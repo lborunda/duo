@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
-import { captureNativePhoto, watchNativeCamera } from '../services/nativeCamera';
+import { captureNativePhoto, openNativeSetup, stopNativeCamera, watchNativeCamera } from '../services/nativeCamera';
 
 declare global {
   interface Window { __DUO_CAMERA_PATH__?: string }
@@ -18,6 +18,9 @@ export const useSharedCamera = (onCapture: (imageData: string) => void) => {
   const [isStreaming, setIsStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [detail, setDetail] = useState('Connecting to camera…');
+  const [setupSummary, setSetupSummary] = useState('');
+  const [cameraStopped, setCameraStopped] = useState(false);
+  const [stopping, setStopping] = useState(false);
 
   const stopStream = useCallback(() => {
     generation.current++;
@@ -42,6 +45,8 @@ export const useSharedCamera = (onCapture: (imageData: string) => void) => {
         if (!path || current !== generation.current || stopWatching) return;
         stopWatching = watchNativeCamera(path, status => {
           setDetail(status.detail);
+          setCameraStopped(status.state === 'stopped');
+          setSetupSummary(status.setupSummary || 'Glasses setup is managed by DUO Tour.');
           setError(status.state === 'error' ? status.detail : null);
         }, url => {
           setPreviewUrl(url);
@@ -82,6 +87,7 @@ export const useSharedCamera = (onCapture: (imageData: string) => void) => {
   }, [nativeMode, stopStream]);
 
   const retryStream = useCallback(async () => {
+    if (stopping) return;
     if (!nativeMode) return startStream();
     const path = window.__DUO_CAMERA_PATH__;
     if (!path) return setError('The native camera bridge is not ready. Close and reopen the companion in DUO Tour.');
@@ -91,7 +97,24 @@ export const useSharedCamera = (onCapture: (imageData: string) => void) => {
       setError(null);
       setDetail('Connecting to glasses…');
     } catch (err) { setError(err instanceof Error ? err.message : 'Retry failed.'); }
-  }, [nativeMode, startStream]);
+  }, [nativeMode, startStream, stopping]);
+
+  const stopSharedCamera = useCallback(async () => {
+    const path = window.__DUO_CAMERA_PATH__;
+    if (!nativeMode || !path || stopping) return;
+    setStopping(true);
+    stopStream();
+    const current = generation.current;
+    setDetail('Stopping glasses camera…');
+    let failure: string | null = null;
+    try { await stopNativeCamera(path); }
+    catch (err) { failure = err instanceof Error ? err.message : 'Could not stop glasses camera.'; }
+    if (current !== generation.current) return;
+    // Resume status observation only. Attaching a subscriber never starts hardware.
+    await startStream();
+    if (failure) setError(failure);
+    setStopping(false);
+  }, [nativeMode, stopping, stopStream, startStream]);
 
   const captureFrame = useCallback(async () => {
     if (captureBusy.current || !isStreaming) return;
@@ -120,5 +143,12 @@ export const useSharedCamera = (onCapture: (imageData: string) => void) => {
     } finally { captureBusy.current = false; }
   }, [nativeMode, isStreaming]);
 
-  return { videoRef, previewUrl, nativeMode, isStreaming, startStream, stopStream, retryStream, captureFrame, error, detail };
+  const openGlassesSetup = useCallback(async () => {
+    const path = window.__DUO_CAMERA_PATH__;
+    if (!nativeMode || !path) return setError('Open the companion inside DUO Tour to configure glasses.');
+    try { await openNativeSetup(path); }
+    catch (err) { setError(err instanceof Error ? err.message : 'Could not open glasses setup.'); }
+  }, [nativeMode]);
+
+  return { videoRef, previewUrl, nativeMode, isStreaming, startStream, stopStream, retryStream, captureFrame, error, detail, setupSummary, openGlassesSetup, cameraStopped, stopping, stopSharedCamera };
 };

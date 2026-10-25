@@ -9,7 +9,7 @@ interface CameraViewProps {
 }
 
 export const CameraView: React.FC<CameraViewProps> = ({ onCapture, onViewChange }) => {
-  const { videoRef, previewUrl, nativeMode, isStreaming, startStream, stopStream, retryStream, captureFrame, error, detail } = useSharedCamera(onCapture);
+  const { videoRef, previewUrl, nativeMode, isStreaming, startStream, stopStream, retryStream, captureFrame, error, detail, setupSummary, openGlassesSetup, cameraStopped, stopping, stopSharedCamera } = useSharedCamera(onCapture);
   
   useEffect(() => {
     startStream();
@@ -41,8 +41,18 @@ export const CameraView: React.FC<CameraViewProps> = ({ onCapture, onViewChange 
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="text-white text-lg text-center">
             <p>{detail}</p>
-            <button onClick={retryStream} className="underline mt-2">Retry camera connection</button>
+            <button onClick={retryStream} disabled={stopping} className="underline mt-2">{cameraStopped ? 'Start camera' : 'Retry camera connection'}</button>
           </div>
+        </div>
+      )}
+
+      {nativeMode && (
+        <div className="absolute bottom-0 inset-x-0 z-30 bg-black/80 text-white p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+          <p className="text-sm whitespace-pre-line" aria-live="polite">{setupSummary}</p>
+          <button onClick={openGlassesSetup} className="underline mt-2">Glasses setup</button>
+          <button onClick={cameraStopped ? retryStream : stopSharedCamera} disabled={stopping} className="underline mt-2 ml-6">
+            {stopping ? 'Stopping…' : cameraStopped ? 'Start camera' : 'Stop camera'}
+          </button>
         </div>
       )}
 

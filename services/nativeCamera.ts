@@ -1,4 +1,15 @@
-export type NativeCameraStatus = { state: 'live' | 'waiting' | 'error'; detail: string };
+export type NativeCameraStatus = { state: 'live' | 'waiting' | 'stopped' | 'error'; detail: string; setupSummary?: string };
+
+/** Explicit Stop releases the shared native camera, not just its web subscriber. */
+export async function stopNativeCamera(path: string, transport = fetch): Promise<void> {
+  const response = await transport(path + 'stop', { method: 'POST', cache: 'no-store' });
+  if (!response.ok) throw new Error('Could not stop the glasses camera. Use Stop in DUO Tour.');
+}
+
+export async function openNativeSetup(path: string, transport = fetch): Promise<void> {
+  const response = await transport(path + 'setup', { method: 'POST', cache: 'no-store' });
+  if (!response.ok) throw new Error('Could not open glasses setup. Return to DUO Tour.');
+}
 
 /** Reads the in-process WebView adapter, not another camera or the inference server. */
 export function watchNativeCamera(

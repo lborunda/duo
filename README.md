@@ -13,9 +13,12 @@ still capture; it does not open a second glasses session or fall back to the
 phone camera. A standalone browser still uses its own camera and requires a
 secure context. The native adapter is available only inside DUO Tour.
 
-This is work in progress: builds and adapter tests pass, but real-glasses
-streaming remains blocked by `SERVICE_NOT_FOUND` during DWA bootstrap on the
-current test setup. The companion's description and speech pipeline is
+Hardware check, October 25: after a confirmed DUO Tour authorization reconnect
+through Meta AI, the phone received real 504x896 frames. The device owner confirmed
+moving video in both interfaces and a successful capture. Both screens expose
+the same native Glasses setup panel; neither creates a second camera session.
+Longer-duration and repeated-disconnect testing are still needed. The
+companion's description and speech pipeline is
 unchanged; this update does not add DUO Tour's grounding rules to those requests.
 
 Validation notes: the existing full TypeScript check is not clean (including
